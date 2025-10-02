@@ -3,8 +3,15 @@
 import { useState } from 'react';
 import { Search, Book, Award, ChevronRight } from 'lucide-react';
 
+type AllahName = {
+  arabic: string;
+  transliteration: string;
+  meaning: string;
+  number: number;
+};
+
 export default function NamesOfAllah() {
-  const names = [
+  const names: AllahName[] = [
     { arabic: "ٱلْرَّحْمَـانُ", transliteration: "Ar-Rahman", meaning: "The Most Merciful", number: 1 },
     { arabic: "ٱلْرَّحِيْمُ", transliteration: "Ar-Raheem", meaning: "The Bestower of Mercy", number: 2 },
     { arabic: "ٱلْمَلِكُ", transliteration: "Al-Malik", meaning: "The King", number: 3 },
@@ -108,13 +115,13 @@ export default function NamesOfAllah() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState('grid');
-  const [selectedName, setSelectedName] = useState(null);
+  const [selectedName, setSelectedName] = useState<AllahName | null>(null);
   const [quizMode, setQuizMode] = useState(false);
   const [currentQuiz, setCurrentQuiz] = useState(0);
   const [score, setScore] = useState(0);
   const [quizAnswered, setQuizAnswered] = useState(false);
 
-  const filteredNames = names.filter(name =>
+  const filteredNames = names.filter((name) =>
     name.transliteration.toLowerCase().includes(searchTerm.toLowerCase()) ||
     name.meaning.toLowerCase().includes(searchTerm.toLowerCase()) ||
     name.arabic.includes(searchTerm)
@@ -127,8 +134,8 @@ export default function NamesOfAllah() {
     setQuizAnswered(false);
   };
 
-  const generateQuizOptions = (correctAnswer) => {
-    const options = [correctAnswer];
+  const generateQuizOptions = (correctAnswer: string): string[] => {
+    const options: string[] = [correctAnswer];
     while (options.length < 4) {
       const randomName = names[Math.floor(Math.random() * names.length)];
       if (!options.includes(randomName.meaning)) {
@@ -138,7 +145,7 @@ export default function NamesOfAllah() {
     return options.sort(() => Math.random() - 0.5);
   };
 
-  const handleQuizAnswer = (selected) => {
+  const handleQuizAnswer = (selected: string) => {
     if (quizAnswered) return;
     setQuizAnswered(true);
     if (selected === names[currentQuiz].meaning) {
